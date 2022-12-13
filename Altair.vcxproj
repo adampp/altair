@@ -144,6 +144,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Altair.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="MsfsInterface.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Altair.h" />
+    <ClInclude Include="definitions.h" />
+    <ClInclude Include="MsfsInterface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
