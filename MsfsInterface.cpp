@@ -24,6 +24,10 @@ void MsfsInterface::start()
 
         // Request a simulation started event
         hr = SimConnect_SubscribeToSystemEvent(_hSimConnect, EVENT_SIM_START, "SimStart");
+        
+        // Request telemetry data
+        hr = SimConnect_RequestDataOnSimObject(_hSimConnect, REQUEST_PITCH, DEFINITION_PITCH, SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_PERIOD_VISUAL_FRAME);
+        hr = SimConnect_RequestDataOnSimObject(_hSimConnect, REQUEST_ROLL, DEFINITION_ROLL, SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_PERIOD_VISUAL_FRAME);
 
         printf("Please launch a flight\n");
 
@@ -43,7 +47,6 @@ void MsfsInterface::_run()
     while (_keepRunningFlag)
     {
         _processDispatch();
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 }
 
@@ -76,13 +79,13 @@ void MsfsInterface::_processDispatch()
                     case REQUEST_PITCH:
                     {
                         structSingle* pS = (structSingle*)&pObjData->dwData;
-                        printf("\nREQUEST_USERID received, pitch = %2.1f", pS->value);
+                        printf("REQUEST_USERID received, pitch = %2.1f\n", pS->value);
                         break;
                     }
                     case REQUEST_ROLL:
                     {
                         structSingle* pS = (structSingle*)&pObjData->dwData;
-                        printf("\nREQUEST_USERID received, roll = %2.1f", pS->value);
+                        printf("REQUEST_USERID received, roll = %2.1f\n", pS->value);
                         break;
                     }
                     default:
@@ -92,14 +95,10 @@ void MsfsInterface::_processDispatch()
             case SIMCONNECT_RECV_ID_EVENT:
             {
                 SIMCONNECT_RECV_EVENT* evt = (SIMCONNECT_RECV_EVENT*)pData;
-
                 switch (evt->uEventID)
                 {
                     case EVENT_SIM_START:
                     {
-                        // Send this request to get the user aircraft id
-                        hr = SimConnect_RequestDataOnSimObject(_hSimConnect, REQUEST_PITCH, DEFINITION_PITCH, SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_PERIOD_VISUAL_FRAME);
-                        hr = SimConnect_RequestDataOnSimObject(_hSimConnect, REQUEST_ROLL, DEFINITION_ROLL, SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_PERIOD_VISUAL_FRAME);
                         break;
                     }
                     default:
@@ -108,14 +107,18 @@ void MsfsInterface::_processDispatch()
             }
             case SIMCONNECT_RECV_ID_QUIT:
             {
-                stop();
+                //stop();
                 break;
             }
             default:
             {
-                printf("\nReceived:%d", pData->dwID);
+                printf("Received:%d\n", pData->dwID);
                 break;
             }
         }
+    }
+    else
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(2));
     }
 }
