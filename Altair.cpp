@@ -3,5 +3,5 @@
 
 Altair::Altair()
 {
-    msfsIntf.start();
+    _msfsIntf.start();
 }

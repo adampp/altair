@@ -1,5 +1,6 @@
 #pragma once
 
+
 static enum GROUP_ID {
     GROUP_KEYS,
 };
@@ -14,11 +15,13 @@ static enum EVENT_ID {
 };
 
 static enum DATA_DEFINE_ID {
+    DEFINITION_DT,
     DEFINITION_PITCH,
     DEFINITION_ROLL,
 };
 
 static enum DATA_REQUEST_ID {
+    REQUEST_DT,
     REQUEST_PITCH,
     REQUEST_ROLL,
 };
@@ -26,10 +29,13 @@ static enum DATA_REQUEST_ID {
 struct structSingle
 {
     double value;
-};;
+};
 
-struct structAttitude
+struct aircraftLatestUpdate
 {
+    double dt;
     double pitch;
     double roll;
+    int updateCount;
+    const int neededUpdates = 3;
 };

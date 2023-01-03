@@ -7,6 +7,6 @@ public:
     Altair();
 
 private:
-    MsfsInterface msfsIntf;
+    MsfsInterface _msfsIntf;
 };
 

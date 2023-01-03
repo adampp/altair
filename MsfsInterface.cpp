@@ -6,6 +6,7 @@
 
 MsfsInterface::MsfsInterface()
 {
+    _latest.updateCount = 0;
 }
 
 void MsfsInterface::start()
@@ -17,6 +18,8 @@ void MsfsInterface::start()
         printf("Connected to Flight Simulator!\n");
 
         // Set up a data definition for the throttle control
+        hr = SimConnect_AddToDataDefinition(_hSimConnect, DEFINITION_DT,
+            "ANIMATION DELTA TIME", "seconds");
         hr = SimConnect_AddToDataDefinition(_hSimConnect, DEFINITION_PITCH,
             "PLANE PITCH DEGREES", "radians");
         hr = SimConnect_AddToDataDefinition(_hSimConnect, DEFINITION_ROLL,
@@ -26,6 +29,7 @@ void MsfsInterface::start()
         hr = SimConnect_SubscribeToSystemEvent(_hSimConnect, EVENT_SIM_START, "SimStart");
         
         // Request telemetry data
+        hr = SimConnect_RequestDataOnSimObject(_hSimConnect, REQUEST_DT, DEFINITION_DT, SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_PERIOD_VISUAL_FRAME);
         hr = SimConnect_RequestDataOnSimObject(_hSimConnect, REQUEST_PITCH, DEFINITION_PITCH, SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_PERIOD_VISUAL_FRAME);
         hr = SimConnect_RequestDataOnSimObject(_hSimConnect, REQUEST_ROLL, DEFINITION_ROLL, SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_PERIOD_VISUAL_FRAME);
 
@@ -57,6 +61,16 @@ void MsfsInterface::stop()
     //_stopped = true;
 }
 
+void MsfsInterface::_checkRunCompleteFrame()
+{
+    std::cout << _latest.updateCount << std::endl;
+    if (_latest.updateCount != _latest.neededUpdates)
+        return;
+
+    std::cout << "complete frame!" << std::endl;
+    _latest.updateCount = 0;
+}
+
 void MsfsInterface::_processDispatch()
 {
     SIMCONNECT_RECV* pData;
@@ -64,7 +78,6 @@ void MsfsInterface::_processDispatch()
     HRESULT hr;
 
     hr = SimConnect_GetNextDispatch(_hSimConnect, &pData, &cbData);
-    printf(".");
 
     if (SUCCEEDED(hr))
     {
@@ -76,21 +89,33 @@ void MsfsInterface::_processDispatch()
 
                 switch (pObjData->dwRequestID)
                 {
+                    case REQUEST_DT:
+                    {
+                        structSingle* pS = (structSingle*)&pObjData->dwData;
+                        printf("REQUEST_DT received, dt = %2.1f\n", pS->value);
+                        _latest.dt = pS->value;
+                        break;
+                    }
                     case REQUEST_PITCH:
                     {
                         structSingle* pS = (structSingle*)&pObjData->dwData;
-                        printf("REQUEST_USERID received, pitch = %2.1f\n", pS->value);
+                        printf("REQUEST_PITCH received, pitch = %2.1f\n", pS->value);
+                        _latest.pitch = pS->value;
                         break;
                     }
                     case REQUEST_ROLL:
                     {
                         structSingle* pS = (structSingle*)&pObjData->dwData;
-                        printf("REQUEST_USERID received, roll = %2.1f\n", pS->value);
+                        printf("REQUEST_ROLL received, roll = %2.1f\n", pS->value);
+                        _latest.roll = pS->value;
                         break;
                     }
                     default:
                         break;
                 }
+
+                _latest.updateCount++;
+                _checkRunCompleteFrame();
             }
             case SIMCONNECT_RECV_ID_EVENT:
             {
