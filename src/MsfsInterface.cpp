@@ -1,6 +1,3 @@
-#include <chrono>
-#include <thread>
-
 #include "MsfsInterface.h"
 
 

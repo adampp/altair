@@ -22,9 +22,7 @@ private:
 	void _run();
 	void _checkRunCompleteFrame();
 
-	std::atomic<bool> _keepRunningFlag = false;
-	//bool _stopped = true;
-	//std::thread _simConnectThread;
+	bool _keepRunningFlag = false;
 	HANDLE  _hSimConnect = NULL;
 	aircraftLatestUpdate _latest;
 

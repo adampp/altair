@@ -39,3 +39,8 @@ struct aircraftLatestUpdate
     int updateCount;
     const int neededUpdates = 3;
 };
+
+struct controlOutput
+{
+    double cPitch;
+};
