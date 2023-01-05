@@ -34,3 +34,6 @@
 # VS items/Build
 .vs*
 x64*
+
+# Libraries
+eigen*

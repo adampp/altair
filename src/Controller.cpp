@@ -1,10 +1,11 @@
 #include <iostream>
 
+#include <Eigen/Dense>
+
 #include "Controller.h"
 
 Controller::Controller()
 {
-
 }
 
 controlOutput Controller::iterate(aircraftLatestUpdate state)
