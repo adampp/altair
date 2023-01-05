@@ -42,5 +42,5 @@ struct aircraftLatestUpdate
 
 struct controlOutput
 {
-    double cPitch;
+    double pitch = 0;
 };

@@ -4,6 +4,7 @@
 //#include <stdio.h>
 #include <strsafe.h>
 #include <iostream>
+#include <functional>
 #include <thread>
 #include <atomic>
 
@@ -13,7 +14,7 @@
 class MsfsInterface
 {
 public:
-	MsfsInterface();
+	MsfsInterface(std::function<controlOutput(aircraftLatestUpdate)> iterate);
 	void start();
 	void stop();
 
@@ -25,6 +26,7 @@ private:
 	bool _keepRunningFlag = false;
 	HANDLE  _hSimConnect = NULL;
 	aircraftLatestUpdate _latest;
+	std::function<controlOutput(aircraftLatestUpdate)> _iterate;
 
 };
 

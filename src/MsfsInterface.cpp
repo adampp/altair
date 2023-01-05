@@ -1,7 +1,8 @@
 #include "MsfsInterface.h"
 
 
-MsfsInterface::MsfsInterface()
+MsfsInterface::MsfsInterface(std::function<controlOutput(aircraftLatestUpdate)> iterate):
+    _iterate(iterate)
 {
     _latest.updateCount = 0;
 }
@@ -33,8 +34,6 @@ void MsfsInterface::start()
         printf("Please launch a flight\n");
 
         _keepRunningFlag = true;
-        //_stopped = false;
-        //_simConnectThread = std::thread(&MsfsInterface::_run, this);
         _run();
     }
     else
@@ -60,11 +59,10 @@ void MsfsInterface::stop()
 
 void MsfsInterface::_checkRunCompleteFrame()
 {
-    std::cout << _latest.updateCount << std::endl;
     if (_latest.updateCount != _latest.neededUpdates)
         return;
 
-    std::cout << "complete frame!" << std::endl;
+    controlOutput actuation = _iterate(_latest);
     _latest.updateCount = 0;
 }
 
@@ -89,21 +87,21 @@ void MsfsInterface::_processDispatch()
                     case REQUEST_DT:
                     {
                         structSingle* pS = (structSingle*)&pObjData->dwData;
-                        printf("REQUEST_DT received, dt = %2.1f\n", pS->value);
+                        printf("REQUEST_DT received, dt = %1.4f\n", pS->value);
                         _latest.dt = pS->value;
                         break;
                     }
                     case REQUEST_PITCH:
                     {
                         structSingle* pS = (structSingle*)&pObjData->dwData;
-                        printf("REQUEST_PITCH received, pitch = %2.1f\n", pS->value);
+                        printf("REQUEST_PITCH received, pitch = %2.4f\n", pS->value);
                         _latest.pitch = pS->value;
                         break;
                     }
                     case REQUEST_ROLL:
                     {
                         structSingle* pS = (structSingle*)&pObjData->dwData;
-                        printf("REQUEST_ROLL received, roll = %2.1f\n", pS->value);
+                        printf("REQUEST_ROLL received, roll = %2.4f\n", pS->value);
                         _latest.roll = pS->value;
                         break;
                     }

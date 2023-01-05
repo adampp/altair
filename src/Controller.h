@@ -7,10 +7,9 @@ class Controller
 {
 public:
 	Controller();
-	controlOutput iterate();
+	controlOutput iterate(aircraftLatestUpdate state);
 
 private:
-	bool deleteme;
 
 };
 

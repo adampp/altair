@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "Controller.h"
 
 Controller::Controller()
@@ -5,8 +7,10 @@ Controller::Controller()
 
 }
 
-controlOutput Controller::iterate()
+controlOutput Controller::iterate(aircraftLatestUpdate state)
 {
-
+	std::cout << "CONTROLLER!" << std::endl;
+	controlOutput a;
+	return a;
 }
 
