@@ -18,12 +18,16 @@ static enum DATA_DEFINE_ID {
     DEFINITION_DT,
     DEFINITION_PITCH,
     DEFINITION_ROLL,
+    DEFINITION_V_SPEED,
+
+    DEFINITION_ELEVATOR,
 };
 
 static enum DATA_REQUEST_ID {
     REQUEST_DT,
     REQUEST_PITCH,
     REQUEST_ROLL,
+    REQUEST_V_SPEED,
 };
 
 struct structSingle
@@ -36,11 +40,17 @@ struct aircraftLatestUpdate
     double dt;
     double pitch;
     double roll;
+    double vSpeed;
     int updateCount;
-    const int neededUpdates = 3;
+    const int neededUpdates = 4;
 };
 
-struct controlOutput
+struct controllerOutput
 {
-    double pitch = 0;
+    double elevator;
+};
+
+struct elevatorControl
+{
+    int elevatorPosition = -8421;
 };

@@ -7,7 +7,7 @@ class Controller
 {
 public:
 	Controller();
-	controlOutput iterate(aircraftLatestUpdate state);
+	controllerOutput iterate(aircraftLatestUpdate state);
 
 private:
 

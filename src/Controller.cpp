@@ -8,10 +8,11 @@ Controller::Controller()
 {
 }
 
-controlOutput Controller::iterate(aircraftLatestUpdate state)
+controllerOutput Controller::iterate(aircraftLatestUpdate state)
 {
 	std::cout << "CONTROLLER!" << std::endl;
-	controlOutput a;
+	controllerOutput a;
+	a.elevator = 0.5;
 	return a;
 }
 
