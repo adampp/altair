@@ -27,6 +27,12 @@
     <ClInclude Include="src\Controller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\csvWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Altair.cpp">
@@ -39,6 +45,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Controller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

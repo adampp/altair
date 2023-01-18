@@ -10,6 +10,7 @@
 
 #include "SimConnect.h"
 #include "definitions.h"
+#include "csvWriter.h"
 
 class MsfsInterface
 {
@@ -23,12 +24,18 @@ private:
 	void _run();
 	void _checkRunCompleteFrame();
 	void _executeControl(controllerOutput actuation);
+	void _writeLog();
 
 	bool _keepRunningFlag = false;
-	bool _runControl = false;
+	bool _runControlFlag = false;
+	bool _writeLogFlag = false;
+	bool _firstLogWrittenFlag = false;
 	HANDLE  _hSimConnect = NULL;
 	aircraftLatestUpdate _latest;
+	aircraftParameters _config;
 	std::function<controllerOutput(aircraftLatestUpdate)> _iterate;
+	std::unique_ptr<csvfile> _log;
+	std::unique_ptr<csvfile> _configCsv;
 
 };
 

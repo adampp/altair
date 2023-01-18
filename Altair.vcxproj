@@ -145,14 +145,17 @@
   <ItemGroup>
     <ClInclude Include="src\Altair.h" />
     <ClInclude Include="src\Controller.h" />
+    <ClInclude Include="src\csvWriter.h" />
     <ClInclude Include="src\definitions.h" />
     <ClInclude Include="src\MsfsInterface.h" />
+    <ClInclude Include="src\pid.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Altair.cpp" />
     <ClCompile Include="src\Controller.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MsfsInterface.cpp" />
+    <ClCompile Include="src\pid.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
