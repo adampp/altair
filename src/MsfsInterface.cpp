@@ -1,7 +1,7 @@
 #include "MsfsInterface.h"
 
 
-MsfsInterface::MsfsInterface(std::function<controllerOutput(aircraftLatestUpdate)> iterate):
+MsfsInterface::MsfsInterface(std::function<controllerOutput(aircraftLatestUpdate, aircraftParameters)> iterate):
     _iterate(iterate)
 {
     _latest.updateCount = 0;
@@ -333,6 +333,10 @@ void MsfsInterface::_executeControl(controllerOutput actuation)
     ctrl.value = actuation.elevator;
     // -1.0 to 1.0, -1 is nose down, +1 is nose up
     hr = SimConnect_SetDataOnSimObject(_hSimConnect, DEFINITION_ELEVATOR, SIMCONNECT_OBJECT_ID_USER, 0, 0, sizeof(ctrl), &ctrl);
+
+    ctrl.value = actuation.aileron;
+    // ?
+    hr = SimConnect_SetDataOnSimObject(_hSimConnect, DEFINITION_AILERON, SIMCONNECT_OBJECT_ID_USER, 0, 0, sizeof(ctrl), &ctrl);
 }
 
 void MsfsInterface::_checkRunCompleteFrame()
@@ -342,7 +346,7 @@ void MsfsInterface::_checkRunCompleteFrame()
 
     if (_runControlFlag)
     {
-        controllerOutput actuation = _iterate(_latest);
+        controllerOutput actuation = _iterate(_latest, _config);
         _executeControl(actuation);
     }
 

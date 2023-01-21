@@ -15,7 +15,7 @@
 class MsfsInterface
 {
 public:
-	MsfsInterface(std::function<controllerOutput(aircraftLatestUpdate)> iterate);
+	MsfsInterface(std::function<controllerOutput(aircraftLatestUpdate, aircraftParameters)> iterate);
 	void start();
 	void stop();
 
@@ -33,7 +33,7 @@ private:
 	HANDLE  _hSimConnect = NULL;
 	aircraftLatestUpdate _latest;
 	aircraftParameters _config;
-	std::function<controllerOutput(aircraftLatestUpdate)> _iterate;
+	std::function<controllerOutput(aircraftLatestUpdate, aircraftParameters)> _iterate;
 	std::unique_ptr<csvfile> _log;
 	std::unique_ptr<csvfile> _configCsv;
 

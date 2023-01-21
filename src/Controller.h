@@ -3,19 +3,18 @@
 #include <cmath>
 
 #include "definitions.h"
+#include "pid.h"
 
 class Controller
 {
 public:
 	Controller();
-	controllerOutput iterate(aircraftLatestUpdate state);
+	controllerOutput iterate(aircraftLatestUpdate state, aircraftParameters params);
 
 private:
-	const double _vSpeedP = 0.02;
-	const double _vSpeedI = 0.0006;
-	const double _vSpeedIntegralSat = 0.2 / _vSpeedI;
-	const double _vSpeedD = 1;
-	double _vSpeedPriorErr = nan("");
-	double _vSpeedIntegralErr = 0;
+
+	INIReader _reader;
+	std::shared_ptr<PID> _pitchPid;
+	std::shared_ptr<PID> _rollPid;
 };
 

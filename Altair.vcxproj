@@ -134,6 +134,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,6 +148,7 @@
     <ClInclude Include="src\Controller.h" />
     <ClInclude Include="src\csvWriter.h" />
     <ClInclude Include="src\definitions.h" />
+    <ClInclude Include="src\INIReader.h" />
     <ClInclude Include="src\MsfsInterface.h" />
     <ClInclude Include="src\pid.h" />
   </ItemGroup>
@@ -156,6 +158,9 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MsfsInterface.cpp" />
     <ClCompile Include="src\pid.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="altair.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

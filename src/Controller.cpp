@@ -4,42 +4,24 @@
 
 #include "Controller.h"
 
-Controller::Controller()
+Controller::Controller():
+	_reader("altair.ini"),
+	_pitchPid(new PID("pitch_pid", _reader, false)),
+	_rollPid(new PID("roll_pid", _reader, true))
 {
 }
 
-controllerOutput Controller::iterate(aircraftLatestUpdate state)
+controllerOutput Controller::iterate(aircraftLatestUpdate state, aircraftParameters params)
 {
-	double desiredVSpeed = 0;
-
-	double err = desiredVSpeed - state.vSpeed_mps;
+	//pitch < 0 up, pitch > 0 down
+	double elevCmd = _pitchPid->iterate(state.pitch_rad, 0);
 	
-	//proportional
-	double p = _vSpeedP * err;
-
-	//integral
-	_vSpeedIntegralErr += err;
-	if (_vSpeedIntegralErr > _vSpeedIntegralSat)
-		_vSpeedIntegralErr = _vSpeedIntegralSat;
-	else if (_vSpeedIntegralErr < -1 * _vSpeedIntegralSat)
-		_vSpeedIntegralErr = -1 * _vSpeedIntegralSat;
-	double i = _vSpeedI * _vSpeedIntegralErr;
-
-	//derivative
-	double d = 0;
-	if (!isnan(_vSpeedPriorErr))
-		d = _vSpeedD * (err - _vSpeedPriorErr);
+	//roll < 0 right wing down, roll > 0 right wing up
+	double aileronCmd = _rollPid->iterate(state.roll_rad, 0);
 
 	controllerOutput a;
-	a.elevator = p + i + d;
-	std::cout << "vSpeed: " << state.vSpeed_mps;
-	std::cout << ", err: " << err;
-	std::cout << ", p: " << p;
-	std::cout << ", i: " << i;
-	std::cout << ", d: " << d;
-	std::cout << ", elevator: " << a.elevator << std::endl;
-
-	_vSpeedPriorErr = err;
+	a.aileron = aileronCmd;
+	a.elevator = elevCmd;
 	return a;
 }
 

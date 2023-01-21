@@ -205,5 +205,6 @@ struct aircraftLatestUpdate
 
 struct controllerOutput
 {
+    double aileron = 0;
     double elevator = 0;
 };
