@@ -79,11 +79,11 @@ void MsfsInterface::start()
         hr = SimConnect_AddToDataDefinition(_hSimConnect, DEFINITION_AIRSPEED_IND,
             "AIRSPEED INDICATED", "m/s");
         hr = SimConnect_AddToDataDefinition(_hSimConnect, DEFINITION_AIRSPEED_X,
-            "AIRCRAFT WIND X", "m/s");
+            "RELATIVE WIND VELOCITY BODY X", "m/s");
         hr = SimConnect_AddToDataDefinition(_hSimConnect, DEFINITION_AIRSPEED_Y,
-            "AIRCRAFT WIND Y", "m/s");
+            "RELATIVE WIND VELOCITY BODY Y", "m/s");
         hr = SimConnect_AddToDataDefinition(_hSimConnect, DEFINITION_AIRSPEED_Z,
-            "AIRCRAFT WIND Z", "m/s");
+            "RELATIVE WIND VELOCITY BODY Z", "m/s");
 
         hr = SimConnect_AddToDataDefinition(_hSimConnect, DEFINITION_LATITUDE,
             "PLANE LATITUDE", "radians");
@@ -522,21 +522,25 @@ void MsfsInterface::_processDispatch()
                 }
                 case REQUEST_AIRSPEED_IND:
                 {
+                    //std::cout << "ind " << pS->value << std::endl;
                     _latest.airspeedIndicated_mps = pS->value;
                     break;
                 }
                 case REQUEST_AIRSPEED_X:
                 {
+                    //std::cout << "x " << pS->value << std::endl;
                     _latest.airspeedLateral_mps = pS->value;
                     break;
                 }
                 case REQUEST_AIRSPEED_Y:
                 {
+                    //std::cout << "y " << pS->value << std::endl;
                     _latest.airspeedVert_mps = pS->value;
                     break;
                 }
                 case REQUEST_AIRSPEED_Z:
                 {
+                    //std::cout << "z " << pS->value << std::endl;
                     _latest.airspeedLong_mps = pS->value;
                     break;
                 }
