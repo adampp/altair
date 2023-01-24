@@ -151,6 +151,7 @@
     <ClInclude Include="src\INIReader.h" />
     <ClInclude Include="src\MsfsInterface.h" />
     <ClInclude Include="src\pid.h" />
+    <ClInclude Include="src\Trajectory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Altair.cpp" />
@@ -158,6 +159,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MsfsInterface.cpp" />
     <ClCompile Include="src\pid.cpp" />
+    <ClCompile Include="src\Trajectory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="altair.ini" />

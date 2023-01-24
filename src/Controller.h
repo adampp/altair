@@ -5,6 +5,7 @@
 
 #include "definitions.h"
 #include "pid.h"
+#include "Trajectory.h"
 
 class Controller
 {
@@ -13,10 +14,8 @@ public:
 	controllerOutput iterate(aircraftLatestUpdate state, aircraftParameters params);
 
 private:
-	void _setAltitudeTrajectory(double altitudeTarget, aircraftLatestUpdate& state, aircraftParameters& params);
-	double _runAltitudeTrajectory(aircraftLatestUpdate& state, aircraftParameters& params);
-	double _headingTrajectory(aircraftLatestUpdate& state, aircraftParameters& params);
 	INIReader _reader;
+	std::shared_ptr<Trajectory> _altitudeTrajectory;
 	std::shared_ptr<PID> _vSpeedPid;
 	std::shared_ptr<PID> _pitchPid;
 	std::shared_ptr<PID> _rollPid;
@@ -31,8 +30,5 @@ private:
 	double _vSpeedMin;
 	double _vSpeedRampDist;
 	int _vSpeedRampLength;
-
-	int _i;
-	double _pitchTarget;
 };
 
