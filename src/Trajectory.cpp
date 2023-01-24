@@ -42,16 +42,13 @@ void Trajectory::build(double current, double target, double currentRate)
 
 	double halfway = err / 2;
 	double sum = 0;
+
+	_rateTargets.emplace_back(currentRate);
+	_times.emplace_back(0);
 	while (((goingUpFlag) & (sum < halfway)) | ((!goingUpFlag) & (sum > halfway))) {
-		double prior = currentRate;
-		double time = 0;
-		if (_rateTargets.size() > 0) {
-			prior = _rateTargets.back();
-			time = _times.back();
-		}
-		_times.emplace_back(time + _timeStep);
+		_times.emplace_back(_times.back() + _timeStep);
 		
-		double rate = prior + (dirScale * rateStep);
+		double rate = _rateTargets.back() + (dirScale * rateStep);
 
 		if (rate > rateCap)
 			rate = rateCap;
@@ -61,8 +58,13 @@ void Trajectory::build(double current, double target, double currentRate)
 	}
 
 	unsigned n = _times.size();
-	for (auto i = n; i-- > 0;) {
+	for (auto i = n; i-- > 1;) {
 		_times.emplace_back(_times.back() + _timeStep);
+		if (((goingUpFlag) & (_rateTargets[i] < 0)) | ((!goingUpFlag) & (_rateTargets[i] > 0))) {
+			_rateTargets.emplace_back(0);
+			break;
+		}
+
 		_rateTargets.emplace_back(_rateTargets[i]);
 	}
 
@@ -103,7 +105,12 @@ double Trajectory::iterate(double dt, double current, double target)
 		return _altitudePid->iterate(current, target);
 	}
 
-	double targetRate = _rateTargets[i];
+	double r_p = _rateTargets[i - 1];
+	double r_n = _rateTargets[i];
+	double t_p = _times[i - 1];
+	double t_n = _times[i];
+
+	double targetRate = r_p + (r_n - r_p) * (_timeSum - t_p) / (t_n - t_p);
 
 	std::cout << "i: " << i << "timeSum: " << _timeSum << " target: " << targetRate << std::endl;
 
